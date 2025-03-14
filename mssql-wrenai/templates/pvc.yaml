@@ -12,7 +12,7 @@ apiVersion: v1
 metadata:
   name: mssql-data
   annotations:
-    volume.beta.kubernetes.io/storage-class: {{ .Values.pvc.StorageClass | quote }}
+    storageClassName: {{ .Values.pvc.StorageClass | quote }}
 spec:
   accessModes:
   - {{ .Values.pvc.mssqldataaccessMode | quote}}
@@ -25,7 +25,7 @@ apiVersion: v1
 metadata:
   name: mssql-userdb
   annotations:
-    volume.beta.kubernetes.io/storage-class: {{ .Values.pvc.StorageClass}}
+    storageClassName: {{ .Values.pvc.StorageClass}}
 spec:
   accessModes:
   - {{ .Values.pvc.userdbaccessMode | quote}}
@@ -38,7 +38,7 @@ apiVersion: v1
 metadata:
   name: mssql-log
   annotations:
-    volume.beta.kubernetes.io/storage-class: {{ .Values.pvc.StorageClass}}
+    storageClassName: {{ .Values.pvc.StorageClass}}
 spec:
   accessModes:
    - {{ .Values.pvc.userlogaccessMode | quote}}
@@ -51,7 +51,7 @@ apiVersion: v1
 metadata:
   name: mssql-temp
   annotations:
-    volume.beta.kubernetes.io/storage-class: {{ .Values.pvc.StorageClass}}
+    storageClassName: {{ .Values.pvc.StorageClass}}
 spec:
   accessModes:
    - {{ .Values.pvc.tempdbaccessMode | quote}}
