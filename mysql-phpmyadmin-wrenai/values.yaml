@@ -8,6 +8,8 @@ image:
 
 
 mysql:
+#  fullnameOverride: "mysql"
+  host: "mysql"
   auth:
     rootPassword: rootpassword
     database: mydatabase
@@ -19,7 +21,7 @@ mysql:
 
 phpmyadmin:
   db:
-    host: my-db-mysql
+    chartName: "mysql"
     port: 3306
     username: root
     password: rootpassword
