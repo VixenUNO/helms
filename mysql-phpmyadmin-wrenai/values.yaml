@@ -1,0 +1,43 @@
+namespace: testert  # Default namespace, can be overridden
+
+
+image:
+  repository: "bitnami/phpmyadmin"  # або інший образ
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+
+mysql:
+  auth:
+    rootPassword: rootpassword
+    database: mydatabase
+    username: myuser
+    password: mypassword
+  primary:
+    service:
+      port: 3306
+
+phpmyadmin:
+  db:
+    host: my-db-mysql
+    port: 3306
+    username: root
+    password: rootpassword
+  service:
+    type: LoadBalancer
+
+serviceAccount:
+  create: true
+
+service:
+  type: ClusterIP  # або LoadBalancer, якщо потрібно зовнішнє підключення
+  port: 80
+
+ingress:
+  enabled: false
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
