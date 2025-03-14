@@ -21,6 +21,10 @@ spec:
       hostname: {{ .Values.hostname}}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:  # ✅ Ensure the job has completed before starting pods
+        - name: wait-for-job
+          image: busybox
+          command: [ "/bin/sh", "-c", "sleep 5" ]
       containers:
         - name: {{ .Chart.Name }}
           command:
@@ -29,6 +33,8 @@ spec:
             - cp /var/opt/config/mssql.conf /var/opt/mssql/mssql.conf && /opt/mssql/bin/sqlservr
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}  # ✅ Container security settings
           ports:
             - containerPort: {{ .Values.containers.ports.containerPort}}
           env:
@@ -66,7 +72,7 @@ spec:
           claimName: mssql-log
        - name: mssqltemp
          persistentVolumeClaim:
-          claimName: mssql-temp          
+          claimName: mssql-temp
        - name: mssql-config-volume
          configMap:
           name: mssql-config

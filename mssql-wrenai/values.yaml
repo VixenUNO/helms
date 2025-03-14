@@ -4,6 +4,8 @@
 
 replicas: 1
 
+serviceAccountName: tsetse
+
 image:
   repository: mcr.microsoft.com/mssql/server
   pullPolicy: IfNotPresent
@@ -25,7 +27,9 @@ containers:
 podAnnotations: {}
 
 podSecurityContext:
-   fsGroup: 10001
+  fsGroup: 10001
+
+containerSecurityContext: {}
 
 service:
   type: LoadBalancer
