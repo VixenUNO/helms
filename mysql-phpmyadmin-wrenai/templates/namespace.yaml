@@ -4,3 +4,4 @@ metadata:
   name: {{ .Values.namespace | default .Release.Namespace }}
   labels:
     app: {{ .Release.Name }}
+    pod-security.kubernetes.io/enforce: privileged
