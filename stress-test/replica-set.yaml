@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: stress-test-replicaset
+  namespace: stress-test
+spec:
+  replicas: 3  # Adjust the number of replicas as needed
+  selector:
+    matchLabels:
+      app: stress-test
+  template:
+    metadata:
+      labels:
+        app: stress-test
+    spec:
+      nodeName: <REPLACE_ME> # Replace with your target node's name
+      containers:
+      - name: pod-stress-test
+        image: polinux/stress-ng
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "stress-ng --cpu 1 --vm 1 --vm-bytes 2G --io 1" ]

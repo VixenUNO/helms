@@ -1,0 +1,20 @@
+replicaCount: 1
+
+image:
+  repository: dbeaver/cloudbeaver
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8978
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: cloudbeaver.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
