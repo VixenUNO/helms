@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      # initContainers:
+      #   - name: fix-permissions
+      #     image: busybox
+      #     command: ["sh", "-c", "chmod 600 /pgadmin4/pgpass"]
+      #     volumeMounts:
+      #       - name: pgpass-volume
+      #         mountPath: /pgadmin4/pgpass
+      initContainers:
+        - name: copy-pgpass
+          image: busybox
+          command: [ "sh", "-c", "cp /config/pgpass /pgpass/pgpass && chmod 600 /pgpass/pgpass && chown 5050:0 /pgpass/pgpass" ]
+          volumeMounts:
+            - name: pgpass-volume
+              mountPath: /config
+            - name: writable-pgpass
+              mountPath: /pgpass
+      containers:
+        - name: pgadmin
+          image: {{ .Values.pgadmin.image }}
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: {{ .Values.pgadmin.email }}
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: {{ .Values.pgadmin.password }}
+            - name: PGADMIN_DB_PASSWORD
+              value: {{ .Values.pgadmin.db_password }}
+            - name: PGPASSFILE
+              value: /pgadmin4/pgpass
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: pgadmin-config
+              mountPath: /pgadmin4/servers.json
+              subPath: servers.json
+            - name: writable-pgpass
+              mountPath: /pgadmin4/pgpass
+              subPath: pgpass
+      volumes:
+        - name: pgadmin-config
+          configMap:
+            name: pgadmin-config
+        - name: pgpass-volume
+          configMap:
+            name: pgpass-config
+        - name: writable-pgpass
+          emptyDir: {}

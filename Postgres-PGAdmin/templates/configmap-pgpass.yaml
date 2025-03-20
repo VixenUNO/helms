@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgpass-config
+  namespace: {{ .Values.namespace }}
+data:
+  pgpass: |
+    postgres:5432:{{ .Values.postgres.database }}:{{ .Values.postgres.username }}:{{ .Values.postgres.password }}

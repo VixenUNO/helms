@@ -19,3 +19,8 @@ spec:
         image: polinux/stress-ng
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "stress-ng --cpu 1 --vm 1 --vm-bytes 2G --io 1" ]
+
+# --cpu 3: Spawns three CPU stressor process.
+# --io 3: Spawns three I/O stressor process.
+# --vm 3: Spawns three virtual memory stressor process.
+# --vm-bytes 2G: Allocates 2G of memory per virtual memory stressor process.
