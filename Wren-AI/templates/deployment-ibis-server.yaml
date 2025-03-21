@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ibis-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ibis-server
+  template:
+    metadata:
+      labels:
+        app: ibis-server
+    spec:
+      containers:
+        - name: ibis-server
+          image: ghcr.io/canner/wren-engine-ibis:{{ .Values.env.IBIS_SERVER_VERSION }}
+          ports:
+            - containerPort: {{ .Values.env.IBIS_SERVER_PORT }}
+          env:
+            - name: WREN_ENGINE_ENDPOINT
+              value: http://wren-engine:{{ .Values.env.WREN_ENGINE_PORT }}
+          envFrom:
+            - configMapRef:
+                name: wrenai-env

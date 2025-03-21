@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wren-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wren-ui
+  template:
+    metadata:
+      labels:
+        app: wren-ui
+    spec:
+      containers:
+        - name: wren-ui
+          image: ghcr.io/canner/wren-ui:{{ .Values.env.WREN_UI_VERSION }}
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: wrenai-env
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wrenai-data

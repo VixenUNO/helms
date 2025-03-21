@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootstrap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootstrap
+  template:
+    metadata:
+      labels:
+        app: bootstrap
+    spec:
+      containers:
+        - name: bootstrap
+          image: ghcr.io/canner/wren-bootstrap:{{ .Values.env.WREN_BOOTSTRAP_VERSION }}
+          command: ["/bin/sh", "/app/init.sh"]
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+          envFrom:
+            - configMapRef:
+                name: wrenai-env
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wrenai-data

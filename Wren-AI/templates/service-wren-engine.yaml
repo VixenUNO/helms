@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wren-engine
+spec:
+  selector:
+    app: wren-engine
+  ports:
+    - name: http
+      port: {{ .Values.env.WREN_ENGINE_PORT }}
+      targetPort: {{ .Values.env.WREN_ENGINE_PORT }}
+    - name: sql
+      port: {{ .Values.env.WREN_ENGINE_SQL_PORT }}
+      targetPort: {{ .Values.env.WREN_ENGINE_SQL_PORT }}
+  type: ClusterIP

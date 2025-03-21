@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wren-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wren-engine
+  template:
+    metadata:
+      labels:
+        app: wren-engine
+    spec:
+      containers:
+        - name: wren-engine
+          image: ghcr.io/canner/wren-engine:{{ .Values.env.WREN_ENGINE_VERSION }}
+          ports:
+            - containerPort: {{ .Values.env.WREN_ENGINE_PORT }}
+            - containerPort: {{ .Values.env.WREN_ENGINE_SQL_PORT }}
+          volumeMounts:
+            - name: data
+              mountPath: /usr/src/app/etc
+            - name: project-data
+              mountPath: /usr/src/app/data
+          envFrom:
+            - configMapRef:
+                name: wrenai-env
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: wrenai-data
+        - name: project-data
+          emptyDir: {}

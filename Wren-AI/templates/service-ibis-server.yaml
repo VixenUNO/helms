@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ibis-server
+spec:
+  selector:
+    app: ibis-server
+  ports:
+    - port: {{ .Values.env.IBIS_SERVER_PORT }}
+      targetPort: {{ .Values.env.IBIS_SERVER_PORT }}
+  type: ClusterIP
